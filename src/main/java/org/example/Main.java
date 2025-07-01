@@ -2,20 +2,25 @@ package org.example;
 
 import java.util.*;
 
-public class Main{
-    public static String calculateLetterGrade (int score){
+public class Main {
+    public static String calculateLetterGrade(int score) {
         String grade = "";
-        if (score >= 90 && score <= 100) grade = "A";
-        else if (score >= 80) grade = "B";
-        else if (score >= 70) grade = "C";
-        else if (score >= 60) grade = "D";
-        else grade = "F";
+        if (score >= 90 && score <= 100)
+            grade = "A";
+        else if (score >= 80)
+            grade = "B";
+        else if (score >= 70)
+            grade = "C";
+        else if (score >= 60)
+            grade = "D";
+        else
+            grade = "F";
         return grade;
     }
 
-    public static float calculateAverage (int[] scores){
+    public static float calculateAverage(int[] scores) {
         float sum = 0, average = 0;
-        for (int score: scores){
+        for (int score : scores) {
             sum += score;
         }
         average = sum / scores.length;
@@ -26,24 +31,49 @@ public class Main{
         Scanner scanner = new Scanner(System.in);
         int[] gradeCounts = new int[5];
 
-        System.out.print("Enter number of students: ");
-        int num = Integer.parseInt(scanner.nextLine());
+        int num = 0;
+        while (true) {
+            System.out.print("Enter number of students: ");
+            try {
+                num = Integer.parseInt(scanner.nextLine());
+                if (num <= 0) {
+                    System.out.println("Number of students must be positive.");
+                    continue;
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+            }
+        }
+
         String[] names = new String[num];
         int[] scores = new int[num];
         String[] topStudents = new String[num];
         int topStudentsCount = 0;
         int highestScore = -1;
 
-        for (int i = 1; i <= num; i++ ){
+        for (int i = 1; i <= num; i++) {
             System.out.printf("%nEnter name of student %d: ", i);
             String name = scanner.nextLine();
-            names[i-1] = name;
+            names[i - 1] = name;
 
-            System.out.printf("Enter score for %s: ", name);
-            int score = Integer.parseInt(scanner.nextLine());
-            scores[i-1] = score;
+            int score = -1;
+            while (true) {
+                System.out.printf("Enter score for %s: ", name);
+                try {
+                    score = Integer.parseInt(scanner.nextLine());
+                    if (score < 0 || score > 100) {
+                        System.out.println("Score must be between 0 and 100.");
+                        continue;
+                    }
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a valid integer.");
+                }
+            }
+            scores[i - 1] = score;
 
-            if (score > highestScore){
+            if (score > highestScore) {
                 highestScore = score;
                 topStudentsCount = 0;
                 topStudents[topStudentsCount] = name;
@@ -54,7 +84,7 @@ public class Main{
             }
 
             String letterGrade = (calculateLetterGrade(score));
-            switch (letterGrade){
+            switch (letterGrade) {
                 case "A":
                     gradeCounts[0]++;
                     break;
@@ -86,9 +116,10 @@ public class Main{
         System.out.printf("D:%d ", gradeCounts[3]);
         System.out.printf("F:%d %n", gradeCounts[4]);
         System.out.printf("Top Student(s): ");
-        for (int i = 0; i < topStudentsCount; i++){
+        for (int i = 0; i < topStudentsCount; i++) {
             System.out.printf(topStudents[i]);
-            if (i < topStudentsCount - 1) System.out.print(", ");
+            if (i < topStudentsCount - 1)
+                System.out.print(", ");
         }
         System.out.printf(" (%d) %n", highestScore);
     }
